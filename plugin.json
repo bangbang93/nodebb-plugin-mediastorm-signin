@@ -1,0 +1,13 @@
+{
+  "id": "nodebb-plugin-iml-api",
+  "name": "NodeBB API",
+  "description": "Extend nodebb api methods based on nodebb-plugin-write-api.",
+  "url": "",
+  "library": "./index.js",
+  "hooks": [
+    {
+      "hook": "filter:plugin.write-api.routes",
+      "method": "extendApiRoutes"
+    }
+  ]
+}

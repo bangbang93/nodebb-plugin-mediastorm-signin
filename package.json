@@ -1,0 +1,21 @@
+{
+    "name": "nodebb-plugin-iml-api",
+    "version": "1.0.0",
+    "description": "Extend nodebb api methods based on nodebb-plugin-write-api.",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [
+        "nodebb",
+        "api"
+    ],
+    "author": "xiaoxinw",
+    "license": "MIT",
+    "peerDependencies": {
+        "nodebb-plugin-write-api": "~3"
+    },
+    "nbbpm": {
+        "compatibility": "^0.8.3 || ^0.9.0"
+    }
+}

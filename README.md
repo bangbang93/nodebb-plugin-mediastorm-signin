@@ -10,4 +10,4 @@ In order to use these extended api methods, you should have [Write Api Plugin](h
 
 ### /api/v1/recent
 
-Get recent topics, can limit the length of the return list with the query numsOfTopics
+Get recent topics, can limit the length of the return list with the appending query "nums={num}".

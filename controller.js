@@ -1,17 +1,47 @@
 'use strict';
 
-var topics = require.main.require('./src/topics');
-var meta=require.main.require('./src/meta');
+// var topics = require.main.require('./src/topics');
+// var meta = require.main.require('./src/meta');
+const axios = require('axios')
+axios.defaults.withCredentials = true
 
-var apiController = {};
+const user = require.main.require('./src/user')
+const authenticationController = require.main.require('./src/controllers/authentication')
 
-apiController.getRecentTopics = function(req, next) {
+const apiController = {}
 
-    var stop = (parseInt(req.query.nums, 10) || parseInt(meta.config.topicsPerList, 10) || 20) - 1;
+apiController.wechatProxy = async function (req, next) {
+    // TODO: 改成配置域名
+    axios.post('https://test.ysjf.com/api/forum/decrypt', req.body)
+        .then(res => JSON.parse(res.data))
+        .then(async (data) => {
+            let forumId = data.forumId
+            if (!forumId) {
+                throw new Error({message: "登录失败"})
+            }
+            if (forumId === -1) {
+                // 创建用户 + 绑定到网站
+                forumId = await user.create({
+                    username: data.nickname,
+                    email: data.mail ?? `${data.phone}@ysjf-fake-email.com`
+                })
+                await axios.post('https://test.ysjf.com/api/forum/bind', {forumId})
+            }
+            return forumId
+        })
+        .then(uid => {
+            req.session.forceLogin = true
+            authenticationController.doLogin(req, uid)
+        })
+        .then(() => next(null, {message: 'success'}))
+        .catch(err => {
+            if(err.response) {
+                next(err.response.data)
+            } else {
+                next(err)
+            }
+        })
+    console.log(req.body)
+}
 
-    topics.getTopicsFromSet('topics:recent', req.uid, 0, stop, function(err, data) {
-        next(err, data);
-    });
-};
-
-module.exports = apiController;
+module.exports = apiController

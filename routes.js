@@ -4,20 +4,17 @@
     var controller = require('./controller');
 
     Module.exports = function(payload, callback) {
-        var router = payload.router,
-            apiMiddleware = payload.apiMiddleware,
-            middleware = payload.coreMiddleware,
-            errorHandler = payload.errorHandler;
+        var router = payload.router
 
-        router.get('/recent', apiMiddleware.requireUser, function(req, res) {
-            controller.getRecentTopics(req, function(error, data) {
+        router.post('/wechatProxy', function (req, res) {
+            controller.wechatProxy(req, function (error, data) {
                 if (error) {
-                    return errorHandler.respond(500, res);
+                    res.json(error)
+                } else {
+                    res.json(data)
                 }
-
-                res.json(data);
-            });
-        });
+            })
+        })
 
         callback(null, payload);
     };

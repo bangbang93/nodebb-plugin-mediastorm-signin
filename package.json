@@ -1,5 +1,5 @@
 {
-    "name": "nodebb-plugin-iml-api",
+    "name": "nodebb-plugin-mediastorm-signin",
     "version": "1.0.0",
     "description": "Extend nodebb api methods based on nodebb-plugin-write-api.",
     "main": "index.js",
@@ -8,7 +8,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/xiaoxinw/nodebb-plugin-iml-api"
+        "url": "https://github.com/mediastormDev/nodebb-plugin-mediastorm-signin"
     },
     "bugs": {
         "url": "https://github.com/xiaoxinw/nodebb-plugin-iml-api/issues"
@@ -24,5 +24,9 @@
     },
     "nbbpm": {
         "compatibility": "^0.8.3 || ^0.9.0"
+    },
+    "dependencies": {
+        "axios": "^0.21.1",
+        "body-parser": "^1.19.0"
     }
 }

@@ -1,12 +1,12 @@
 {
-  "id": "nodebb-plugin-iml-api",
+  "id": "nodebb-plugin-mediastorm-signin",
   "name": "NodeBB API",
   "description": "Extend nodebb api methods based on nodebb-plugin-write-api.",
   "url": "",
   "library": "./index.js",
   "hooks": [
     {
-      "hook": "filter:plugin.write-api.routes",
+      "hook": "static:api.routes",
       "method": "extendApiRoutes"
     }
   ]

@@ -15,7 +15,7 @@ apiController.wechatProxy = async function (req, next) {
     axios.post('https://test.ysjf.com/api/forum/decrypt', req.body)
         .then(async (res) => {
             const data = res.data
-            const cookie = res.headers['Set-Cookie']
+            const cookie = res.headers['set-cookie'][0]
             let forumId = data.forumId
             if (!forumId) {
                 throw new Error({message: "登录失败"})
@@ -40,13 +40,13 @@ apiController.wechatProxy = async function (req, next) {
         })
         .then(() => next(null, {message: 'success'}))
         .catch(err => {
+            console.log(err)
             if(err.response) {
                 next(err.response.data)
             } else {
                 next(err)
             }
         })
-    console.log(req.body)
 }
 
 module.exports = apiController

@@ -13,8 +13,9 @@ const apiController = {}
 apiController.wechatProxy = async function (req, next) {
     // TODO: 改成配置域名
     axios.post('https://test.ysjf.com/api/forum/decrypt', req.body)
-        .then(res => JSON.parse(res.data))
-        .then(async (data) => {
+        .then(async (res) => {
+            const data = res.data
+            const cookie = res.headers['Set-Cookie']
             let forumId = data.forumId
             if (!forumId) {
                 throw new Error({message: "登录失败"})
@@ -25,7 +26,11 @@ apiController.wechatProxy = async function (req, next) {
                     username: data.nickname,
                     email: data.mail ?? `${data.phone}@ysjf-fake-email.com`
                 })
-                await axios.post('https://test.ysjf.com/api/forum/bind', {forumId})
+                await axios.post('https://test.ysjf.com/api/forum/bind', {forumId}, {
+                    headers: {
+                        Cookie: cookie,
+                    },
+                })
             }
             return forumId
         })

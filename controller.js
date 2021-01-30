@@ -1,7 +1,8 @@
 'use strict';
 
 // var topics = require.main.require('./src/topics');
-// var meta = require.main.require('./src/meta');
+const meta = require.main.require('./src/meta')
+const utils = require.main.require('./src/utils')
 const axios = require('axios')
 axios.defaults.withCredentials = true
 
@@ -34,11 +35,22 @@ apiController.wechatProxy = async function (req, next) {
             }
             return forumId
         })
-        .then(uid => {
+        .then(async (uid) => {
             req.session.forceLogin = true
             authenticationController.doLogin(req, uid)
+            const settings = await meta.settings.get('core.api')
+            settings.tokens = settings.tokens || []
+            const newToken = {
+                token: utils.generateUUID(),
+                uid,
+                description: `sigin by wechat ${uid}`,
+                timestamp: Date.now(),
+            }
+            settings.tokens.push(newToken)
+            await meta.settings.set('core.api', settings)
+            return newToken
         })
-        .then(() => next(null, {message: 'success'}))
+        .then((token) => next(null, token))
         .catch(err => {
             console.log(err)
             if(err.response) {
